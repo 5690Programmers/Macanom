@@ -38,7 +38,9 @@ public:
 		if (autoSelected == autoNameCustom) {
 			std::cout << "Running custom Autonomous" << std::endl;
 			myRobot.SetSafetyEnabled(false);
+			myRobot.MecanumDrive_Polar(0.1, 90.0, 0.0);
 			frc::Wait(1.0);
+			myRobot.MecanumDrive_Polar(0.0, 0.0, 0.0);
 		} else {
 			// Default Auto goes here
 			std::cout << "Running default Autonomous" << std::endl;
@@ -53,6 +55,7 @@ public:
 		myRobot.SetSafetyEnabled(true);
 		while (IsOperatorControl() && IsEnabled()) {
 
+			myRobot.MecanumDrive_Cartesian( stick.GetY(), stick.GetX(), stick.GetZ(), gyro.GetAngle());
 
 			// wait for a motor update time
 			frc::Wait(0.005);
