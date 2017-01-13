@@ -12,7 +12,7 @@
 
 
 class Robot: public frc::SampleRobot {
-	frc::RobotDrive myRobot {0, 1, 2, 3};
+	frc::RobotDrive myRobot {0, 1, 2, 3}; // hay nerds please change me
 	frc::Joystick stick {0};
 	frc::ADXRS450_Gyro gyro;
 	SendableChooser<std::string> chooser;
@@ -36,12 +36,9 @@ public:
 		std::cout << "Auto selected: " << autoSelected << std::endl;
 
 		if (autoSelected == autoNameCustom) {
-			// Custom Auto goes here
 			std::cout << "Running custom Autonomous" << std::endl;
 			myRobot.SetSafetyEnabled(false);
-			myRobot.Drive(-0.5, 1.0); // spin at half speed
-			frc::Wait(2.0);                // for 2 seconds
-			myRobot.Drive(0.0, 0.0);  // stop robot
+			frc::Wait(1.0);
 		} else {
 			// Default Auto goes here
 			std::cout << "Running default Autonomous" << std::endl;
@@ -56,7 +53,6 @@ public:
 		myRobot.SetSafetyEnabled(true);
 		while (IsOperatorControl() && IsEnabled()) {
 
-			myRobot.MecanumDrive_Cartesian(stick.GetX(), stick.GetX(), stick.GetY(), gyro.GetAngle());
 
 			// wait for a motor update time
 			frc::Wait(0.005);
