@@ -8,13 +8,13 @@
 #include <SmartDashboard/SmartDashboard.h>
 #include <RobotDrive.h>
 #include <Timer.h>
-#include <interFaces/Gyro.h>
+#include <ADXRS450_Gyro.h>
 
-using frc;
 
 class Robot: public frc::SampleRobot {
-	RobotDrive myRobot {0, 1, 2, 3};
-	Joystick stick {0};
+	frc::RobotDrive myRobot {0, 1, 2, 3};
+	frc::Joystick stick {0};
+	frc::ADXRS450_Gyro gyro;
 	SendableChooser<std::string> chooser;
 	const std::string autoNameDefault = "Default";
 	const std::string autoNameCustom = "My Auto";
@@ -28,6 +28,7 @@ public:
 		chooser.AddDefault(autoNameDefault, autoNameDefault);
 		chooser.AddObject(autoNameCustom, autoNameCustom);
 		SmartDashboard::PutData("Auto Modes", &chooser);
+		gyro.Reset();
 	}
 
 	void Autonomous() {
@@ -39,14 +40,14 @@ public:
 			std::cout << "Running custom Autonomous" << std::endl;
 			myRobot.SetSafetyEnabled(false);
 			myRobot.Drive(-0.5, 1.0); // spin at half speed
-			Wait(2.0);                // for 2 seconds
+			frc::Wait(2.0);                // for 2 seconds
 			myRobot.Drive(0.0, 0.0);  // stop robot
 		} else {
 			// Default Auto goes here
 			std::cout << "Running default Autonomous" << std::endl;
 			myRobot.SetSafetyEnabled(false);
 			myRobot.Drive(-0.5, 0.0); // drive forwards half speed
-			Wait(2.0);                // for 2 seconds
+			frc::Wait(2.0);                // for 2 seconds
 			myRobot.Drive(0.0, 0.0);  // stop robot
 		}
 	}
@@ -55,10 +56,10 @@ public:
 		myRobot.SetSafetyEnabled(true);
 		while (IsOperatorControl() && IsEnabled()) {
 
-			myRobot.MecanumDrive_Cartesian(stick.GetX(), stick.GetY(), 0)
+			myRobot.MecanumDrive_Cartesian(stick.GetX(), stick.GetX(), stick.GetY(), gyro.GetAngle());
 
 			// wait for a motor update time
-			Wait(0.005);
+			frc::Wait(0.005);
 		}
 	}
 
